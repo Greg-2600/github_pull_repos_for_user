@@ -1,10 +1,9 @@
 #!/bin/bash
 
-user="gregbakerstl"
+#user="gregbakerstl"
 user="$1"
 mainURL="https://github.com/$user?tab=repositories"
-me=$(whoami)
-pwd="/home/$me/projects/$user"
+pwd="../$user/"
 
 
 getRepoList() {
@@ -45,8 +44,13 @@ pullRepos() {
 
 
 main () {
-# flow control
+	# flow control
+	[ $# -eq 0 ] && { echo "Usage: $0 github_user_account"; exit 1; }
+
 	repoList=$(getRepoList) # instantiate list of repos for user
 	echo $repoList|tr " " "\n"|generateCloneLinks|cloneRepos # do initial clone
 	echo $repoList|tr " " "\n"|pullRepos                     # update existing repos
 }
+
+
+main $1
