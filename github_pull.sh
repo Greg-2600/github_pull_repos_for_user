@@ -34,22 +34,12 @@ cloneRepos() {
 }
 
 
-pullRepos() {
-# update repos that are already present
-	while read repo; do
-		cd "$pwd/$repo/" # move to the repo
-		git pull         # pull the deltas
-	done
-}
-
-
 main () {
 	# flow control
 	[ $# -eq 0 ] && { echo "Usage: $0 github_user_account"; exit 1; }
 
 	repoList=$(getRepoList) # instantiate list of repos for user
 	echo $repoList|tr " " "\n"|generateCloneLinks|cloneRepos # do initial clone
-	echo $repoList|tr " " "\n"|pullRepos                     # update existing repos
 }
 
 
