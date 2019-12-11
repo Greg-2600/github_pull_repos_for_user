@@ -17,18 +17,18 @@ getRepoList() {
 
 generateCloneLinks() {
 # tokenize the repo names into a URI target
-	while read repo; do 
+	while read -r repo; do 
 		cloneLink="https://github.com/$user/$repo.git" # build the clone variable
-		echo $cloneLink 			       # return the result
+		echo "$cloneLink" 			       # return the result
 	done
 }
 
 
 cloneRepos() {
 # clone repositories to the right place
-	mkdir -p $pwd # make the correct directories
-	cd $pwd       # move into it
-	while read cloneLinks; do
+	mkdir -p "$pwd"   # make the correct directories
+	cd "$pwd"||exit 1 # move into it
+	while read -r cloneLinks; do
 		git clone "$cloneLinks" 2>/dev/null # download the repo and send errors to bit bucket
 	done
 }
@@ -39,8 +39,8 @@ main () {
 	[ $# -eq 0 ] && { echo "Usage: $0 github_user_account"; exit 1; }
 
 	repoList=$(getRepoList) # instantiate list of repos for user
-	echo $repoList|tr " " "\n"|generateCloneLinks|cloneRepos # do initial clone
+	echo "$repoList"|tr " " "\n"|generateCloneLinks|cloneRepos # do initial clone
 }
 
 
-main $1
+main "$1"
